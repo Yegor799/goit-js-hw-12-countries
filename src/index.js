@@ -1,7 +1,9 @@
 import API from './js/fetchCountries.js';
 import countryCardTpl from './templates/country-card.hbs';
 import countriesTpl from './templates/countries';
-import { error } from '@pnotify/core';
+import {error } from '@pnotify/core';
+import '@pnotify/core/dist/BrightTheme.css';
+import '@pnotify/core/dist/PNotify.css';
 import './styles.css';
 
 const debounce = require('lodash.debounce');
@@ -13,13 +15,23 @@ const cardContainer = document.querySelector('.js-card-container');
 formControl.addEventListener('input', debounce(onInput, 500));
 
 
-function onInput (){
-    API.fetchCountry(formControl.value).then(appearance);
+function onInput() {
+  if (formControl.value.indexOf(' ') > -1) {
+  return
+}
+
+
+  if (!formControl.value) {
+    return;
+  }
+  
+      API.fetchCountry(formControl.value).then(appearance);
 }
 
 function appearance(countries) {
     cardContainer.innerHTML = '';
-
+  
+  
      if (countries.status) {
     error('Error 404, try again');
     return;
